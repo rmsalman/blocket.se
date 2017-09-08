@@ -4,7 +4,7 @@
 </head>
 <body>
 <?php $this->load->view('includes/navigation'); ?>
-<?php $this->load->view('includes/main-header'); ?>
+<?php $this->load->view('includes/job-header'); ?>
 
 	<?php $this->load->view('pages/'.$page); ?>
 

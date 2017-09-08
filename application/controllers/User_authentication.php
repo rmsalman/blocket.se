@@ -6,6 +6,7 @@ class User_Authentication extends CI_Controller
 		
 		// Load facebook library
 		$this->load->library('facebook');
+		$this->load->library('form_validation');
 		//Load user model
 		$this->load->model('user');
     }
@@ -15,6 +16,7 @@ class User_Authentication extends CI_Controller
 		
 		// Check if user is logged in
 		if($this->facebook->is_authenticated()){
+			error_reporting(0);
 			// Get user facebook profile details
 			$userProfile = $this->facebook->request('get', '/me?fields=id,first_name,last_name,email,gender,locale,picture');
 
@@ -42,15 +44,18 @@ class User_Authentication extends CI_Controller
 			
 			// Get logout URL
 			$data['logoutUrl'] = $this->facebook->logout_url();
-		}else{
+		}
+		else if(!empty($this->session->userdata('username'))){
+			redirect(base_url());
+		}
+		else{
             $fbuser = '';
 			
 			// Get login URL
             $data['authUrl'] =  $this->facebook->login_url();
         }
-		
-		// Load login & profile view
-        $this->load->view('user_authentication/index',$data);
+        $page = 'login'; 
+		$this->load->view('layouts/login-layout', array('page' => $page , 'data' => $data));
     }
 
 	public function logout() {
@@ -58,7 +63,72 @@ class User_Authentication extends CI_Controller
 		$this->facebook->destroy_session();
 		// Remove user data from session
 		$this->session->unset_userdata('userData');
+		$this->session->unset_userdata('username');
+		$this->session->unset_userdata('password');
 		// Redirect to login page
-        redirect('/user_authentication');
+        redirect(base_url());
+    }
+
+    public function login(){
+    	$data = array();
+    	if($this->input->post('submit')){
+    		$this->form_validation->set_rules('username', 'User name', 'trim|required');
+            $this->form_validation->set_rules('password', 'Password', 'trim|required');
+            if ($this->form_validation->run()) {
+                if($this->user->custom_login($this->input->post('username'),$this->input->post('password'))){
+                	$data['success'] = "Login successfull";
+                	$this->session->set_userdata(array('username' => $this->input->post('username') , 'password' => $this->input->post('password')));
+                }
+                else{
+                	$data['authUrl'] = $this->facebook->login_url();
+                	$data['error'] = "Username or password incorrect";
+                }
+            }
+        $page = 'login';
+    	$this->load->view('layouts/login-layout', array('page' => $page, 'data' => $data));
+    	}
+    	else{
+    		redirect('/user_authentication');
+    	}
+    }
+
+    public function signup(){
+    	$data = array();
+    	if($this->input->post('submit')){
+    		$this->form_validation->set_rules('fname', 'First Name', 'trim|required');
+            $this->form_validation->set_rules('lname', 'Last Name', 'trim|required');
+            $this->form_validation->set_rules('username', 'Username', 'trim|required');
+            $this->form_validation->set_rules('password', 'Password', 'trim|required');
+            $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|max_length[255]');
+            $this->form_validation->set_rules('role', 'Role', 'trim|required');
+            $this->form_validation->set_rules('subrole', 'Sub Role', 'trim|required');
+            $this->form_validation->set_rules('phone', 'Contact No', 'trim|required');
+            if ($this->form_validation->run()) {
+            	$data = [
+            	'first_name' => $this->input->post('fname'),
+            	'last_name' => $this->input->post('lname'),
+            	'username' => $this->input->post('username'),
+            	'password' => crypt($this->input->post('password'),"+#23%,a92*"),
+            	'email' => $this->input->post('email'),
+            	'role' => $this->input->post('role'),
+            	'subrole' => $this->input->post('subrole'),
+            	'phone' => $this->input->post('phone'),
+            	];
+            	if($this->user->signup($data)){
+            	$data['success'] = "Data inserted successfully";
+            	$this->session->set_userdata('username',$this->input->post('username'));
+            	}
+            	else{
+            		$data['error'] = "Error While proccessing request";
+            	}
+            }
+            else{
+            	$data['error'] = validation_errors();
+            }
+    	}else if(!empty($this->session->userdata('username'))){
+    		redirect('/user_authentication');
+    	}
+    	$page = 'signup';
+    	$this->load->view('layouts/login-layout', array('page' => $page, 'data' => $data));
     }
 }

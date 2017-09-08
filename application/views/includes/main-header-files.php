@@ -10,3 +10,5 @@
 <link rel="stylesheet" href="assets/plugins/FontAwesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="<?= CSS; ?>bootstrap.min.css">
 <link rel="stylesheet" href="<?= CSS; ?>styles.css">
+<link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+<link rel="stylesheet" href="assets/css/owl.theme.default.min.css">
