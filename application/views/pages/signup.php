@@ -20,8 +20,9 @@
 	</form>
 	</div>
 </div>
-<div class="col-lg-6 login-form text-center">
 	<?php else: ?>
-	<h3 class="bg-success success"><?php echo $success ?></h3><?php endif; ?>
-</div>
+	<div class="col-lg-6 login-form text-center">
+	<h3 class="bg-success success"><?php echo $success ?></h3>
+	</div>
+<?php endif; ?>
 </div>
