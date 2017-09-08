@@ -1,0 +1,16 @@
+a.navbar-brand {
+	padding: 0;margin-top: -8px;
+}
+a.navbar-brand>img {
+    max-width: 106px;
+}
+.footer-list a {
+    color: #777;
+}
+.pbs {
+    padding-bottom: 10px;
+}
+.footer-list {
+    list-style: none;
+    padding: 0;
+}
