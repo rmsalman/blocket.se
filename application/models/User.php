@@ -25,4 +25,25 @@ class User extends CI_Model{
 
 		return $userID?$userID:FALSE;
     }
+
+    public function signup($data){
+    	$this->db->insert($this->tableName,$data);
+    	$userID = $this->db->insert_id();
+    	return $userID?$userID:FALSE;
+    }
+
+    public function custom_login($username,$password){
+    	$this->db->select('*');
+    	$this->db->from($this->tableName);
+    	$this->db->where(array('username' => $username , 'password' => crypt($password,"+#23%,a92*")));
+    	$data = $this->db->get()->result_array();
+    	foreach ($data as $value) {
+    		if(!empty($value['id'])){
+    			return true;
+    		}
+    		else{
+    			return false;
+    		}
+    	}
+    }
 }
