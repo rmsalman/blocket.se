@@ -155,7 +155,6 @@
                     </li>
                 </ul>
             </div>
-
             <div class="col"></div>
         </div>
     </div>
