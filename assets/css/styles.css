@@ -1,3 +1,6 @@
+.no_ico:after {
+	border: 0;
+}
 a.navbar-brand {
 	padding: 0;margin-top: -8px;
 }

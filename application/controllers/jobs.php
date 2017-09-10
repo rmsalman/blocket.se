@@ -3,6 +3,7 @@
 class Jobs extends CI_Controller {
 	public function index(){
 		$page = "jobs";
-		$this->load->view('layouts/jobs-layout',array('page' => $page));
+        $title = 'Jobs';
+		$this->load->view('layouts/jobs-layout', compact('title','page'));
 	}
 }

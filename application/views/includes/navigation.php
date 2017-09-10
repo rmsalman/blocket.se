@@ -17,7 +17,7 @@
         <a class="nav-link" href="#">Residence</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Vehicle</a>
+        <a class="nav-link" href="<?= base_url('vehicles'); ?>">Vehicle</a>
       </li>
     </ul>
     <div class=" my-2 my-lg-0">

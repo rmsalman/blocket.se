@@ -3,8 +3,9 @@
 class Home extends CI_Controller {
 	public function index()
 	{
-		$page = 'home'; 
-		$this->load->view('layouts/main-layout', compact('page'));
+		$page = 'home';
+        $title = 'Home';
+		$this->load->view('layouts/main-layout', compact('page','title'));
 	}
 	public function wazzer() {
         $page_data = [];
